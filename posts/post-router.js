@@ -16,10 +16,17 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
+    knex.select('*').from('posts').where( 'id', '=', req.params.id).first()
+    .then(post => res.status(200).json(post))
+    .catch(err => res.status(500).json({ error: 'Failed to fetch post' }))
 
 });
 
 router.post('/', (req, res) => {
+    knex.insert(req.body, 'id')
+    .into('posts')
+    .then(ids => res.status(200).json(ids))
+    .catch(err => res.status(500).json({ error: 'failed to post post'}))
 
 });
 
